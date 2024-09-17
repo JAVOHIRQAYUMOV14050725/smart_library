@@ -1,0 +1,86 @@
+datasource db { 
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Author {
+  id        Int      @id @default(autoincrement())
+  name      String
+  biography String?
+  birthDate DateTime?
+  books     Book[]   @relation("AuthorBooks")
+}
+
+model Book {
+  id               Int         @id @default(autoincrement())
+  title            String
+  description      String?
+  publicationDate  DateTime?
+  category         Category    @relation(fields: [categoryId], references: [id])
+  categoryId       Int
+  authors          Author[]    @relation("AuthorBooks") 
+  library          Library?    @relation("LibraryBooks", fields: [libraryId], references: [id])
+  libraryId        Int?
+  status           String
+  borrowings       Borrowing[]
+  reviews          Review[]
+  branch           Branch?     @relation("BranchBooks", fields: [branchId], references: [id])
+  branchId         Int?
+  authoredBy       User[]      @relation("AuthoredBooks") 
+}
+
+model Category {
+  id    Int      @id @default(autoincrement())
+  name  String
+  books Book[]  
+}
+
+model Library {
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String
+  books     Book[]  @relation("LibraryBooks")
+}
+
+model Borrowing {
+  id         Int      @id @default(autoincrement())
+  book       Book     @relation(fields: [bookId], references: [id])
+  bookId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  borrowDate DateTime
+  returnDate DateTime?
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  name           String
+  email          String     @unique
+  password       String
+  role           String
+  borrowedBooks  Borrowing[] 
+  reviews        Review[]
+  authoredBooks  Book[]     @relation("AuthoredBooks") 
+}
+
+model Review {
+  id        Int    @id @default(autoincrement())
+  content   String
+  rating    Int
+  book      Book   @relation(fields: [bookId], references: [id])
+  bookId    Int
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  @@unique([bookId, userId])
+}
+
+model Branch {
+  id      Int      @id @default(autoincrement())
+  name    String
+  address String
+  books   Book[]   @relation("BranchBooks")
+}

@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es2016",               
+    "module": "commonjs",    
+    "moduleResolution": "node",         
+    "baseUrl": "./",
+    "paths": {
+      "@config": ["./src/config"],
+      "@utils": ["./src/utils"],
+      "@controllers": ["./src/controllers"],
+      "@middlewares": ["./src/middlewares"],
+      "@models": ["./src/models"],
+      "@routes": ["./src/routes"],
+      "@enums": ["./src/enums"],
+      "@interfaces": ["./src/interfaces"],
+      "@errors": ["./src/errors"]
+    },
+    "esModuleInterop": true,                    
+    "forceConsistentCasingInFileNames": true,     
+    "strict": true,    
+    "typeRoots": ["./types", "./node_modules/@types"],                
+    "skipLibCheck": true                                
+  },
+  "include": [
+    "src/**/*",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
